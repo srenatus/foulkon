@@ -28,12 +28,19 @@ type PolicyGroupRelation interface {
 	GetDate() time.Time
 }
 
-// Foulkon API that implements API interfaces using repositories
-type AuthAPI struct {
+// WorkerAPI that implements API interfaces using repositories
+type WorkerAPI struct {
 	UserRepo   UserRepo
 	GroupRepo  GroupRepo
 	PolicyRepo PolicyRepo
+	ProxyRepo  ProxyRepo
 	Logger     *log.Logger
+}
+
+// ProxyAPI that implements API interfaces using repositories
+type ProxyAPI struct {
+	ProxyRepo ProxyRepo
+	Logger    *log.Logger
 }
 
 // Filter properties for database search
@@ -171,6 +178,11 @@ type AuthzAPI interface {
 	GetAuthorizedExternalResources(requestInfo RequestInfo, action string, resources []string) ([]string, error)
 }
 
+type ProxyResourcesAPI interface {
+	//
+	GetProxyResources() ([]ProxyResource, error)
+}
+
 // REPOSITORY INTERFACES
 
 // UserRepo contains all database operations
@@ -280,4 +292,10 @@ type PolicyRepo interface {
 
 	// OrderByValidColumns returns valid columns that you can use in OrderBy
 	OrderByValidColumns(action string) []string
+}
+
+// ProxyRepo contains all database operations
+type ProxyRepo interface {
+	// Retrieve proxy resources from database. Otherwise it throws an error.
+	GetProxyResources() ([]ProxyResource, error)
 }
