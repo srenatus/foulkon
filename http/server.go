@@ -16,8 +16,6 @@ import (
 	"github.com/kylelemons/godebug/pretty"
 )
 
-var mutex sync.Mutex
-
 type ReloadHandlerFunc func(watch *ProxyServer)
 
 // ProxyServer struct with reload Handler extension
@@ -25,8 +23,9 @@ type ProxyServer struct {
 	certFile string
 	keyFile  string
 
-	reloadFunc  ReloadHandlerFunc
-	refreshTime time.Duration
+	resourceLock sync.Mutex
+	reloadFunc   ReloadHandlerFunc
+	refreshTime  time.Duration
 
 	reloadServe      chan struct{}
 	currentResources []api.ProxyResource
@@ -170,27 +169,22 @@ func (ps *ProxyServer) RefreshResources(proxy *foulkon.Proxy) func(s *ProxyServe
 			return
 		}
 
-		mutex.Lock()
-		defer mutex.Unlock()
-
 		if diff := pretty.Compare(srv.currentResources, result); diff != "" {
+
+			defer srv.resourceLock.Unlock()
+			srv.resourceLock.Lock()
+			// writer lock
 			ps.currentResources = result
 
+			proxy.Logger.Info("Updating resources ...")
 			for _, res := range result {
-				proxy.Logger.Info("Updating resources ...")
-				resource := foulkon.APIResource{
-					Host:   res.Host,
-					Method: res.Method,
-					Urn:    res.Urn,
-					Action: res.Action,
-					Url:    res.Url,
-				}
+				// Check if Url is empty. Handle doesn't accept empty path
 				if res.Url == "" {
 					res.Url = "/"
 				}
-				router.Handle(res.Method, res.Url, proxyHandler.HandleRequest(resource))
-				ps.Server.Handler = router
+				router.Handle(res.Method, res.Url, proxyHandler.HandleRequest(res))
 			}
+			ps.Server.Handler = router
 		}
 	}
 }

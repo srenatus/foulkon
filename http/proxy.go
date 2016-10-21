@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/Tecsisa/foulkon/api"
-	"github.com/Tecsisa/foulkon/foulkon"
 	"github.com/Tecsisa/foulkon/middleware"
 	"github.com/julienschmidt/httprouter"
 	"github.com/satori/go.uuid"
@@ -33,7 +32,7 @@ type ProxyResources struct {
 
 var rUrnParam, _ = regexp.Compile(`\{(\w+)\}`)
 
-func (h *ProxyHandler) HandleRequest(resource foulkon.APIResource) httprouter.Handle {
+func (h *ProxyHandler) HandleRequest(resource api.ProxyResource) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		requestID := uuid.NewV4().String()
 		w.Header().Set(middleware.REQUEST_ID_HEADER, requestID)

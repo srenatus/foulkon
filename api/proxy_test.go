@@ -8,18 +8,12 @@ import (
 
 func TestProxyAPI_GetProxyResources(t *testing.T) {
 	testcases := map[string]struct {
-		requestInfo RequestInfo
-
 		wantError error
 
 		getProxyResourcesMethod []ProxyResource
 		getProxyResourcesErr    error
 	}{
 		"OkCase": {
-			requestInfo: RequestInfo{
-				Identifier: "123456",
-				Admin:      true,
-			},
 			getProxyResourcesMethod: []ProxyResource{
 				{
 					ID:     "ID",
@@ -32,15 +26,11 @@ func TestProxyAPI_GetProxyResources(t *testing.T) {
 			},
 		},
 		"ErrorCaseInternalError": {
-			requestInfo: RequestInfo{
-				Identifier: "123456",
-				Admin:      true,
+			wantError: &Error{
+				Code: UNKNOWN_API_ERROR,
 			},
 			getProxyResourcesErr: &database.Error{
 				Code: database.INTERNAL_ERROR,
-			},
-			wantError: &Error{
-				Code: UNKNOWN_API_ERROR,
 			},
 		},
 	}

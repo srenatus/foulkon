@@ -23,7 +23,7 @@ func (pr PostgresRepo) GetProxyResources() ([]api.ProxyResource, error) {
 	if resources != nil {
 		proxyResources = make([]api.ProxyResource, len(resources), cap(resources))
 		for i, pr := range resources {
-			proxyResources[i] = *dbToAPI(&pr)
+			proxyResources[i] = *dbResourceToApiResource(&pr)
 		}
 	}
 	return proxyResources, nil
@@ -32,7 +32,7 @@ func (pr PostgresRepo) GetProxyResources() ([]api.ProxyResource, error) {
 // PRIVATE HELPER METHODS
 
 // Transform a proxyResource retrieved from db into a proxyResource for API
-func dbToAPI(pr *ProxyResource) *api.ProxyResource {
+func dbResourceToApiResource(pr *ProxyResource) *api.ProxyResource {
 	return &api.ProxyResource{
 		ID:     pr.ID,
 		Host:   pr.Host,

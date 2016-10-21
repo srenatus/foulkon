@@ -351,7 +351,6 @@ func TestProxyServer_Run(t *testing.T) {
 			expectedError: "listen tcp: lookup fail on 127.0.0.1:53: server misbehaving",
 		},
 	}
-
 	for n, test := range testcases {
 		var err error
 		srv := NewProxy(test.proxy)
@@ -359,7 +358,7 @@ func TestProxyServer_Run(t *testing.T) {
 
 		if test.expectedError != "" {
 			err = srv.Run()
-			if err == nil {
+			if err != nil {
 				if diff := pretty.Compare(err.Error(), test.expectedError); diff != "" {
 					t.Errorf("Test %v failed. Received different errors (received/wanted) %v", n, diff)
 					continue
@@ -384,12 +383,14 @@ func TestProxyServer_Run(t *testing.T) {
 			// Wait reloadFunc
 			time.Sleep(5 * time.Millisecond)
 
-			mutex.Lock()
-			if diff := pretty.Compare(srv.(*ProxyServer).currentResources, test.expectedResources); diff != "" {
+			ps := srv.(*ProxyServer)
+
+			ps.resourceLock.Lock()
+			if diff := pretty.Compare(ps.currentResources, test.expectedResources); diff != "" {
 				t.Errorf("Test %v failed. Received different responses (received/wanted) %v", n, diff)
 				continue
 			}
-			mutex.Unlock()
+			ps.resourceLock.Unlock()
 		}
 	}
 }

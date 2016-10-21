@@ -40,19 +40,6 @@ type Proxy struct {
 
 	// Logger
 	Logger *logrus.Logger
-
-	// API Resources
-	APIResources []APIResource
-}
-
-// APIResource represents external API resources to authorize
-type APIResource struct {
-	Id     string
-	Host   string
-	Url    string
-	Method string
-	Urn    string
-	Action string
 }
 
 func NewProxy(config *toml.TomlTree) (*Proxy, error) {

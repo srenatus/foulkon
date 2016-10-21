@@ -677,9 +677,9 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 
 	proxyHandler := ProxyHandler{proxy: proxy, client: http.DefaultClient}
 
-	APIResources := []foulkon.APIResource{
+	APIResources := []api.ProxyResource{
 		{
-			Id:     "resource1",
+			ID:     "resource1",
 			Host:   server.URL,
 			Url:    USER_ID_URL,
 			Method: "GET",
@@ -687,7 +687,7 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 			Action: "example:user",
 		},
 		{
-			Id:     "hostUnreachable",
+			ID:     "hostUnreachable",
 			Host:   "fail",
 			Url:    "/fail",
 			Method: "GET",
@@ -695,7 +695,7 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 			Action: "example:fail",
 		},
 		{
-			Id:     "invalidHost",
+			ID:     "invalidHost",
 			Host:   "%&",
 			Url:    "/invalid",
 			Method: "GET",
@@ -703,7 +703,7 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 			Action: "example:invalid",
 		},
 		{
-			Id:     "invalidUrn",
+			ID:     "invalidUrn",
 			Host:   server.URL,
 			Url:    "/invalidUrn",
 			Method: "GET",
@@ -711,7 +711,7 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 			Action: "example:invalid",
 		},
 		{
-			Id:     "urnPrefix",
+			ID:     "urnPrefix",
 			Host:   server.URL,
 			Url:    "/urnPrefix",
 			Method: "GET",
@@ -719,7 +719,7 @@ func proxyHandlerRouter(proxy *foulkon.Proxy) http.Handler {
 			Action: "&%",
 		},
 		{
-			Id:     "invalidAction",
+			ID:     "invalidAction",
 			Host:   server.URL,
 			Url:    "/invalidAction",
 			Method: "GET",
