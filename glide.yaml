@@ -5,11 +5,11 @@ import:
 - package: github.com/Sirupsen/logrus
   version: 0.10.0
 - package: github.com/julienschmidt/httprouter
-  version: 1.1
+  version: "1.1"
 - package: github.com/lib/pq
   version: go1.0-cutoff
 - package: github.com/jinzhu/gorm
-  version: 1.0
+  version: "1.0"
 - package: github.com/satori/go.uuid
   version: 1.1.0
 - package: github.com/emanoelxavier/openid2go
@@ -20,3 +20,4 @@ import:
   version: eadb3ce320cbab8393bea5ca17bebac3f78a021b
 - package: github.com/stretchr/testify
   version: 1.1.4
+- package: github.com/coreos/go-oidc
