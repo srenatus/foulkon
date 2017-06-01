@@ -13,7 +13,7 @@ import (
 )
 
 func TestWorkerHandler_HandleAddOidcProvider(t *testing.T) {
-	now := time.Now()
+	now := time.Now().UTC()
 	testcases := map[string]struct {
 		// API method args
 		request *CreateOidcProviderRequest
